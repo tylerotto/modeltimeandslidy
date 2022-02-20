@@ -1,0 +1,131 @@
+---
+title: "Time Series Forecasting - Modeltime and Slidy"
+date: '`r format(Sys.Date(), "%B %d, %Y")`<br>• c - table of contents (bottom left) <br>• k - disable click to next slide<br>• use arrow keys to navigate'
+author: "Tyler Otto"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_knit$set(root.dir = "~/Modeltime/modeltimeandslidy")
+
+# Libraries ---------------------------------------------------------------
+currentDate <- Sys.Date() 
+
+library(readxl)
+library(modeltime)
+library(tidymodels)
+library(tidyverse)
+library(timetk)
+library(lubridate)
+library(zoo)
+library(glue)
+library(kableExtra)
+library(tidyselect)
+library(earth)
+library(glmnet)
+library(gt)
+
+Sample_Superstore <- read_excel("Sample - Superstore.xls")
+
+```
+
+
+# Overview
+
+* 5 types of models will be built and the best fit version of each model will be chosen an the champion for each type.
+
+|         - Linear Regression Model
+|         - ARIMA (Autoregressive Integrated Moving Average)
+|         - GLMNET (Lasso and Elastic-Net Regularized Generalized Linear Models)
+|         - Earth/MARS (Multivariate Adaptive Regression Spline)
+|         - ETS (Exponential Smoothing)
+
+* Models are chosen based on aggregating the accuracy measures and choosing the one with the least errors
+
+* Modeltime documentation: https://business-science.github.io/modeltime/
+
+
+# Time Series Testing - Consumer Segment Sales
+
+```{r echo=FALSE, fig.height=7, fig.width=17,fig.align="center", message=FALSE, warning=FALSE}
+
+assess_time <-  "12 months"
+forecasted_months <-  "12 months"
+select_segment <-  "Consumer"
+source('build_models.R'
+       # ,echo = TRUE
+       # , print.eval = TRUE
+       )
+
+
+test_set_plot
+accuracy_table
+  
+```
+
+# Time Series Forecast - Consumer Segment Sales
+
+```{r fig.width=17, fig.height=7, message=FALSE, warning=FALSE, echo=FALSE}
+
+forecast_plot
+
+forecast_compare_table
+
+  
+```
+
+# Time Series Testing - Corporate Segment Sales
+
+```{r echo=FALSE, fig.height=7, fig.width=17,fig.align="center", message=FALSE, warning=FALSE}
+
+assess_time <-  "12 months"
+forecasted_months <-  "12 months"
+select_segment <-  "Corporate"
+source('build_models.R'
+       # ,echo = TRUE
+       # , print.eval = TRUE
+       )
+
+
+test_set_plot
+accuracy_table
+  
+```
+
+# Time Series Forecast - Corporate Segment Sales
+
+```{r fig.width=17, fig.height=7, message=FALSE, warning=FALSE, echo=FALSE}
+
+forecast_plot
+
+forecast_compare_table
+
+```
+
+# Time Series Testing - Home Office Segment Sales
+
+```{r echo=FALSE, fig.height=7, fig.width=17,fig.align="center", message=FALSE, warning=FALSE}
+
+assess_time <-  "12 months"
+forecasted_months <-  "12 months"
+select_segment <-  "Home Office"
+source('build_models.R'
+       # ,echo = TRUE
+       # , print.eval = TRUE
+       )
+
+
+test_set_plot
+accuracy_table
+  
+```
+
+# Time Series Forecast - Home Office Segment Sales
+
+```{r fig.width=17, fig.height=7, message=FALSE, warning=FALSE, echo=FALSE}
+
+forecast_plot
+
+forecast_compare_table
+```

@@ -27,7 +27,7 @@ model_arima <- arima_reg() %>%
 
 model_arima
 
-# Model 2: arima_boost ----
+# Model: arima_boost ----
 model_fit_arima_boosted <- arima_boost(
   min_n = 2,
   learn_rate = 0.015
@@ -38,6 +38,7 @@ model_fit_arima_boosted <- arima_boost(
 
 
 # Multivariate Adaptive Regression Spline model
+
 model_spec_mars <- mars(mode = "regression") %>%
   set_engine("earth") 
 
@@ -63,9 +64,7 @@ wflw_fit_mars <- workflow() %>%
 # 
 # model_prophet
 
-# TRAIN / TEST SPLITS ----
-
-# Model 5: lm ----
+# Linear Model ----
 model_fit_lm <- linear_reg() %>%
   set_engine("lm") %>%
   fit(units ~ as.numeric(dteday) + factor(month(dteday, label = TRUE), ordered = FALSE),
@@ -111,7 +110,8 @@ accuracy_table <-  calib_tbl %>%
   table_modeltime_accuracy(
     .interactive = F
   )
-#compare to current RF
+
+#choose final model
 
 final_test_model <- calib_tbl %>%
   modeltime_accuracy() %>% 
@@ -161,7 +161,7 @@ test_set_plot <-  calib_tbl %>%
   ) %>%
   plot_modeltime_forecast(.plotly_slider = T,
                           # .interactive = FALSE,
-                          .title = paste0("Ax ML Test Set Visualization: ", select_segment)
+                          .title = paste0("Time Series Test Set Visualization: ", select_segment)
   )
 
 test_set_plot
@@ -195,14 +195,14 @@ forecast_plot <- future_forecast_tbl %>%
   mutate( .model_id = as.factor(.model_id)) %>% 
   plot_modeltime_forecast(.plotly_slider = T,
                           # .interactive = FALSE,
-                          .title = paste0("Ax ML Consumption Forecast: ", select_segment, ' Final Model: ',final_model_text)
+                          .title = paste0("Time Series Forecast: ", select_segment, ' Final Model: ',final_model_text)
   )
 
 forecast_plot
 
 
 
-RFvsStat <- future_forecast_tbl %>%
+forecast_compare_tbl <- future_forecast_tbl %>%
   mutate( .model_id = as.factor(.model_id)) %>%
   # filter(.model_desc == final_model_text) %>%
   mutate(consumption_year = year(.index), consumption_month =  month(.index, label = T)) %>%
@@ -210,15 +210,26 @@ RFvsStat <- future_forecast_tbl %>%
   select(.model_desc, consumption_month,consumption_year,.value) %>%
   pivot_wider(names_from = c('consumption_year','.model_desc'), values_from = .value)
 
-RFvsStat2 <- RFvsStat %>%
-  select(tidyselect::starts_with("2018")) %>%
+forecast_compare_tbl2 <- forecast_compare_tbl %>%
+  # select(tidyselect::starts_with("2018")) %>%
   janitor::adorn_totals() %>%
-  mutate_if(is.numeric, comma)
+  as_tibble() %>% 
+  mutate_if(is.numeric, ~comma(as.integer(.)))
 
-final_rf_stat_table <- RFvsStat2 %>%
-  kbl() %>%
-  kable_classic(full_width = F, html_font = "Cambria") %>%
-  row_spec(dim(RFvsStat2)[1], bold = T)
+
+names(forecast_compare_tbl2) = str_sub(names(forecast_compare_tbl2),0,25)
+
+
+forecast_compare_table <- forecast_compare_tbl2 %>% 
+  gt() %>% 
+  tab_style(
+    style = list(
+      cell_fill(color = "lightblue")
+    ),
+    locations = cells_body(
+      # columns = vars(V1, V2), # not needed if coloring all columns
+      rows = 13)
+  )
 
 # 
 # 
