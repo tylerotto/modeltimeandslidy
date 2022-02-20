@@ -218,7 +218,7 @@ forecast_compare_tbl2 <- forecast_compare_tbl %>%
 
 
 names(forecast_compare_tbl2) = str_sub(names(forecast_compare_tbl2),0,25)
-
+ 
 
 forecast_compare_table <- forecast_compare_tbl2 %>% 
   gt() %>% 

@@ -30,7 +30,7 @@ Sample_Superstore <- read_excel("Sample - Superstore.xls")
 
 ```
 
-
+ 
 # Overview
 
 * 5 types of models will be built and the best fit version of each model will be chosen an the champion for each type.
