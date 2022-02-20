@@ -1,6 +1,6 @@
 ---
 title: "Time Series Forecasting - Modeltime and Slidy"
-date: '`r format(Sys.Date(), "%B %d, %Y")`<br>• c - table of contents (bottom left) <br>• k - disable click to next slide<br>• use arrow keys to navigate'
+date: '`r format(Sys.Date(), "%B %d, %Y")`<br>• c - table of contents (bottom left) <br>• k - please disable click to next slide to ensure interactivity works<br>• use arrow keys to navigate'
 author: "Tyler Otto"
 output: slidy_presentation
 ---
