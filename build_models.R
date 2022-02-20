@@ -205,10 +205,10 @@ forecast_plot
 forecast_compare_tbl <- future_forecast_tbl %>%
   mutate( .model_id = as.factor(.model_id)) %>%
   # filter(.model_desc == final_model_text) %>%
-  mutate(consumption_year = year(.index), consumption_month =  month(.index, label = T)) %>%
-  filter(consumption_year == 2018) %>%
-  select(.model_desc, consumption_month,consumption_year,.value) %>%
-  pivot_wider(names_from = c('consumption_year','.model_desc'), values_from = .value)
+  mutate(sales_year = year(.index), sales_month =  month(.index, label = T)) %>%
+  filter(sales_year == 2018) %>%
+  select(.model_desc, sales_month,sales_year,.value) %>%
+  pivot_wider(names_from = c('sales_year','.model_desc'), values_from = .value)
 
 forecast_compare_tbl2 <- forecast_compare_tbl %>%
   # select(tidyselect::starts_with("2018")) %>%
